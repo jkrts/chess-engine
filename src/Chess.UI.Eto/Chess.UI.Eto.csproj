@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>               <!-- ← this line is required -->
+    <TargetFramework>net10.0</TargetFramework>  <!-- or net10.0 if you're targeting it -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Optional but recommended for GUI apps -->
+    <!-- <ApplicationIcon>app.ico</ApplicationIcon> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chess.Core\Chess.Core.csproj" />
+    <PackageReference Include="Eto.Forms" Version="2.10.2" />           <!-- adjust version -->
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.10.2" />    <!-- or Gtk / Mac64 -->
+    <!-- add the backends you actually need -->
+  </ItemGroup>
+
+    <ItemGroup>
+    <!-- Embed every .png file in Assets/Pieces and subfolders -->
+    <EmbeddedResource Include="Assets\Pieces\**/*.png" />
+    <!-- If you have other formats too: -->
+    <!-- <EmbeddedResource Include="Assets\Pieces\**/*" /> -->
+  </ItemGroup>
+
+</Project>
