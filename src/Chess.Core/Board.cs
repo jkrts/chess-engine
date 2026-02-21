@@ -37,6 +37,14 @@ public class Board
         SetStartPositions();
     }
 
+    public Board(string fen)
+    {
+        if (String.IsNullOrWhiteSpace(fen))        
+            throw new ArgumentException("FEN string cannot be empty.", nameof(fen));
+        
+        LoadFenPosition(fen);
+    }
+
     public void SetStartPositions()
     {
         LoadFenPosition(STARTING_FEN);
