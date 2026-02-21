@@ -6,6 +6,8 @@ namespace Chess.Core;
 
 public class Board
 {
+    private Dictionary<int, Piece> _pieces = new ();
+    public IReadOnlyDictionary<int, Piece> Pieces => _pieces;
 
     readonly int[] underBoard = new int[120] {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -33,9 +35,6 @@ public class Board
         91, 92, 93, 94, 95, 96, 97, 98
     };
 
-    public List<Piece> PieceList = new List<Piece>();
-    public Dictionary<int, Piece> dPieceList = new Dictionary<int, Piece>();
-
     public Board()
     {
         SetStartPositions();
@@ -43,16 +42,13 @@ public class Board
 
     public void SetStartPositions()
     {
-        PieceList.Clear();
-
         //LoadFenPosition(STARTING_FEN);
         LoadFenPosition("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2");
     }
 
     public void ClearBoard()
     {
-        PieceList.Clear();
-        dPieceList.Clear();
+        _pieces.Clear();
     }
 
     public const string STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -98,12 +94,11 @@ public class Board
                     int piecePos = (7 - rank) * 8 + file; // flip rank for A8 at top left - Visual
                     int topBoardIndex = piecePos;
 
-                    var newPiece = new Piece(pieceType, pieceColor, topBoardIndex);
-                    PieceList.Add(newPiece);
+                    var newPiece = new Piece(pieceType, pieceColor);
                     
                     try
                     {
-                        dPieceList.Add(topBoardIndex, newPiece);
+                        _pieces.Add(topBoardIndex, newPiece);
                     }
                     catch (Exception ex)
                     {
@@ -156,6 +151,7 @@ public class Board
         }
     */
 
+    /*
     public List<string> LegalMoves(string square)
     {
         // square = 'b1'
@@ -164,7 +160,7 @@ public class Board
         int squareIndex = SquareToIndex(square); // 57
 
         Piece? p = null;
-        foreach (var piece in PieceList)
+        foreach (var piece in dPieceList)
         {
             if (squareIndex == piece.PositionIndex)
             {
@@ -172,7 +168,7 @@ public class Board
                 continue;
             }
         }
-        /*
+    
         if (p?.Type == PieceType.Pawn)
         {
             //int[] moves = { 10, 20 };
@@ -192,7 +188,7 @@ public class Board
 
 
         }
-        */
+        
         if (p?.Type == PieceType.Knight)
         {
             if (underBoard[topBoard[squareIndex] - 21] != -1)
@@ -239,15 +235,16 @@ public class Board
         return validMoves;
 
     }
+*/
 
     public Piece? GetPieceAt(string square)
     {
         var index = SquareToIndex(square);
 
         Piece? p = null;
-        if (dPieceList.TryGetValue(index, out p))
+        if (_pieces.TryGetValue(index, out p))
         {
-            return dPieceList[index];
+            return _pieces[index];
         }
         else
         {

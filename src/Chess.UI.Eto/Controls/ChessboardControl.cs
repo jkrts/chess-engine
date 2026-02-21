@@ -94,7 +94,7 @@ public sealed class ChessboardControl : Drawable
     private void DrawPieces(Graphics g)
     {
 
-        foreach (var piece in _chessBoard.PieceList)
+        foreach (var (posIndex, piece) in _chessBoard.Pieces)
         {
             // White = 1, Black = 2. Pawn = 1, so white would be 1*1, black would be -1*1
             //                    White = 1          Pawn = 1     = 1
@@ -109,7 +109,7 @@ public sealed class ChessboardControl : Drawable
             float x = (_squareSize - drawWidth) / 2f;
             float y = (_squareSize - drawHeight) / 2f;
 
-            var pieceSquare = _chessBoard.IndexToSquare(piece.PositionIndex);
+            var pieceSquare = _chessBoard.IndexToSquare(posIndex);
             var file = (int)(pieceSquare[0] - 'a');
             var rank = (int)7-(pieceSquare[1] - '1'); // flip rank for A8 top left -visual
 
