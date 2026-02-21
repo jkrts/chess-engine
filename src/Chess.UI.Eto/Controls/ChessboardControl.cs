@@ -8,7 +8,7 @@ namespace Chess.UI.Eto.Controls;
 public sealed class ChessboardControl : Drawable
 {
     private Board _chessBoard;
-    public readonly Dictionary<int, Bitmap> _pieceImages = [];
+    private readonly Dictionary<int, Bitmap> _pieceImages = [];
     private Size _boardSize;
     private float _squareSize;
     private string? _selectedSquare;

@@ -2,7 +2,8 @@ namespace Chess.Core;
 
 public enum PieceType
 {
-    // PieceType value is mean to be used during evaluation later
+    // PieceType value is meant to double as relative evaluation
+    // weights to be used later and give each piece an int type
     Pawn = 1,
     Knight = 2,
     King = 3,
