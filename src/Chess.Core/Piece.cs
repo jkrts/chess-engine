@@ -1,7 +1,9 @@
 namespace Chess.Core;
 
+
 public enum PieceType
 {
+    // PieceType value is mean to be used during evaluation later
     Pawn = 1,
     Knight = 2,
     King = 3,
@@ -16,16 +18,15 @@ public enum PieceColor
     Black = -1
 }
 
-public class Piece
+public record Piece
 {
-    public PieceType Type;
-    public PieceColor Color;
-    public int PositionIndex;
+    public PieceType Type { get; init; }
+    public PieceColor Color { get; init; }
 
-    public Piece(PieceType type, PieceColor color, int positionIndex)
+
+    public Piece(PieceType type, PieceColor color)
     {
         Type = type;
         Color = color;
-        PositionIndex = positionIndex;
     }
 }
