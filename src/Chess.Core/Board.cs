@@ -42,8 +42,7 @@ public class Board
 
     public void SetStartPositions()
     {
-        //LoadFenPosition(STARTING_FEN);
-        LoadFenPosition("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2");
+        LoadFenPosition(STARTING_FEN);
     }
 
     public void ClearBoard()
@@ -67,8 +66,6 @@ public class Board
             ['r'] = PieceType.Rook,
             ['q'] = PieceType.Queen
         };
-
-        Console.WriteLine(STARTING_FEN);
 
         string fenBoard = fen.Split(' ')[0];
         int file = 0;

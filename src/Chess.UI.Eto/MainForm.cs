@@ -1,4 +1,3 @@
-using System;
 using Eto.Forms;
 using Eto.Drawing;
 using Chess.UI.Eto.Controls;
@@ -15,8 +14,6 @@ public partial class MainForm : Form
 		private Button btnLoadFen;
 
 		private Board chessBoard;
-	
-
 
 	public MainForm()
 	{
@@ -61,7 +58,6 @@ public partial class MainForm : Form
 
 		};
 
-		
 		var quitCommand = new Command { MenuText = "Quit", Shortcut = Application.Instance.CommonModifier | Keys.Q };
 		quitCommand.Executed += (sender, e) => Application.Instance.Quit();
 

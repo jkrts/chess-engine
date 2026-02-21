@@ -1,18 +1,14 @@
-using System;
-using System.IO;
 using System.Reflection;
-using System.Collections.Generic;
 using Eto.Drawing;
 using Eto.Forms;
 using Chess.Core;
-using System.Collections;
 
 namespace Chess.UI.Eto.Controls;
 
 public sealed class ChessboardControl : Drawable
 {
     private Board _chessBoard;
-    public readonly Dictionary<int, Bitmap> _pieceImages = new();
+    public readonly Dictionary<int, Bitmap> _pieceImages = [];
     private Size _boardSize;
     private float _squareSize;
     private string? _selectedSquare;
@@ -72,7 +68,6 @@ public sealed class ChessboardControl : Drawable
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to load {resourceName}: {ex.Message}");
-                // Optional: create placeholder (e.g. red square)
             }
         }
     }
@@ -190,12 +185,9 @@ public sealed class ChessboardControl : Drawable
         if (file < 0 || file >= 8|| rank < 0 || rank >= 8)
             return;
         
-        //var squareIndex = rank * 7 + file;
-
         char c = (char)('a' + (file));
         string sq = c + (rank + 1).ToString(); 
-
-        
+      
         var pieceAt = _chessBoard.GetPieceAt(sq);
 
         if (pieceAt == null)
@@ -206,7 +198,7 @@ public sealed class ChessboardControl : Drawable
         {
             _selectedSquare = sq;
         }
-        MessageBox.Show(_selectedSquare);
+
         Invalidate();
     }
     
