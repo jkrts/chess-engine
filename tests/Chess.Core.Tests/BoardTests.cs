@@ -36,4 +36,45 @@ public class BoardTests
 
         Assert.Equal(expected, square);
     }
+
+
+    [Fact]
+    public void SquareToIndex_AndIndexToSquare_AreInverseForAllSquares()
+    {
+        for (int i = 0; i < 64; i++)
+        {
+            string square = _board.IndexToSquare(i);
+            int roundTripped = _board.SquareToIndex(square);
+            Assert.True(i == roundTripped, $"Failed for index {i} (square '{square}')");
+        }
+    }
+
+    [Fact]
+    public void GetPieceAt_WhenSquareHasPiece_ReturnsPiece()
+    {
+        var piece = _board.GetPieceAt("a8");
+
+        Assert.NotNull(piece);
+        Assert.Equal(PieceType.Rook, piece.Type);
+        Assert.Equal(PieceColor.Black, piece.Color);
+    }
+
+    [Fact]
+    public void GetPieceAt_WhenSquareIsEmpty_ReturnsNull()
+    {
+        var piece = _board.GetPieceAt("e4");
+
+        Assert.Null(piece);
+    }
+
+    [Fact]
+    public void GetPieceAt_WhenSquareHasWhitePiece_ReturnsPiece()
+    {
+        var piece = _board.GetPieceAt("e1");
+
+        Assert.NotNull(piece);
+        Assert.Equal(PieceType.King, piece.Type);
+        Assert.Equal(PieceColor.White, piece.Color);
+    }
+
 }
