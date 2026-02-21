@@ -1,6 +1,5 @@
 namespace Chess.Core;
 
-
 public enum PieceType
 {
     // PieceType value is mean to be used during evaluation later
