@@ -13,6 +13,9 @@ public sealed class ChessboardControl : Drawable
     private float _squareSize;
     private string? _selectedSquare;
 
+    private readonly Font _coordinateFont = new("Monospace", 9);
+    private readonly SolidBrush _coordinateBrush = new(Colors.Gray);
+
 
     public ChessboardControl(ChessPosition chessPosition, Size boardSize)
     {
@@ -155,16 +158,13 @@ public sealed class ChessboardControl : Drawable
 
     private void DrawCoordinates(Graphics g)
     {
-        var font = new Font("Monospace", 9);
-        var brush = new SolidBrush(Colors.Gray);
-
         for (int file = 0; file < 8; file++)
         {
             char letter = (char)(('a') + file);
             var text = letter.ToString();
             var x = file * _squareSize + _squareSize / 2 - 5;
             var y = 8 * _squareSize - 18;
-            g.DrawText(font, brush, x, y, text);
+            g.DrawText(_coordinateFont, _coordinateBrush, x, y, text);
         }
 
         for (int rank = 0; rank < 8; rank++)
@@ -173,7 +173,7 @@ public sealed class ChessboardControl : Drawable
             var text = number.ToString();
             var x = 4;
             var y = rank * _squareSize + _squareSize / 2 - 6;
-            g.DrawText(font, brush, x, y, text);
+            g.DrawText(_coordinateFont, _coordinateBrush, x, y, text);
         }
     }
 
@@ -205,6 +205,19 @@ public sealed class ChessboardControl : Drawable
         }
 
         Invalidate();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _coordinateFont.Dispose();
+            _coordinateBrush.Dispose();
+            foreach (var bmp in _pieceImages.Values)
+                bmp.Dispose();
+            _pieceImages.Clear();
+        }
+        base.Dispose(disposing);
     }
     
 }
