@@ -7,26 +7,26 @@ namespace Chess.UI.Eto;
 
 public partial class MainForm : Form
 {
-		private ChessboardControl board;
+		private ChessboardControl _boardControl;
+		private TextBox _txtFen;
+		private TextBox _txtSelectedSquare;
+		private Button _btnLoadFen;
 
-		private TextBox txtFen;
-		private TextBox txtSelectedSquare;
-		private Button btnLoadFen;
-
-		private Board chessBoard;
+		private ChessGame _chessGame;
 
 	public MainForm()
 	{
-		chessBoard = new Board();
+		_chessGame = new ChessGame();
+		//chessBoard = new Board();
 
 		Title = "Chess Engine";
 		this.ClientSize = new Size(1600, 900);
 
-		board = new ChessboardControl(chessBoard, new Size(700, 700));
-		txtFen = new TextBox { Text = "", Width = 600 };
-		btnLoadFen = new Button { Text = "Load", Width = 90 };
+		_boardControl = new ChessboardControl(_chessGame.currentChessPosition, new Size(700, 700));
+		_txtFen = new TextBox { Text = "", Width = 600 };
+		_btnLoadFen = new Button { Text = "Load", Width = 90 };
 
-		txtSelectedSquare = new TextBox { Text = "", Width= 90 };
+		_txtSelectedSquare = new TextBox { Text = "", Width= 90 };
 
 		var sideLayout = new StackLayout
 		{
@@ -36,13 +36,13 @@ public partial class MainForm : Form
 			Items =
 			{
 				new Label { Text = "FEN"},
-				txtFen,
-				btnLoadFen,
-				txtSelectedSquare
+				_txtFen,
+				_btnLoadFen,
+				_txtSelectedSquare
 			}
 		};
 
-		btnLoadFen.Click += btnLoadFen_Click;
+		_btnLoadFen.Click += btnLoadFen_Click;
 
 		Content = new TableLayout
 		{
@@ -51,7 +51,7 @@ public partial class MainForm : Form
 			Rows =
 			{
 				new TableRow(
-						new TableCell(board, false),
+						new TableCell(_boardControl, false),
 						new TableCell(sideLayout)
 					),
 			}
@@ -88,7 +88,7 @@ public partial class MainForm : Form
 
 	private void btnLoadFen_Click(object? sender, EventArgs e)
 	{
-		string fen = txtFen.Text?.Trim() ?? "";
+		string fen = _txtFen.Text?.Trim() ?? "";
 
 		if (string.IsNullOrWhiteSpace(fen))
 		{
@@ -98,8 +98,10 @@ public partial class MainForm : Form
 
 		try
 		{
-			chessBoard.LoadFenPosition(fen);
-			Invalidate();
+			_chessGame = new ChessGame();
+			_chessGame.currentChessPosition.LoadFenPosition(fen);
+			_boardControl.UpdateChessPosition(_chessGame.currentChessPosition);
+			_boardControl.Invalidate();
 		}
 		catch (Exception ex)
 		{
