@@ -2,16 +2,16 @@ namespace Chess.Core;
 
 public class ChessGame
 {
-    public ChessPosition currentChessPosition { get; private set; }
+    public ChessPosition CurrentChessPosition { get; private set; }
 
 
     public ChessGame()
     {
-        currentChessPosition = new ChessPosition();
+        CurrentChessPosition = new ChessPosition();
     }
 
     public ChessGame(string fen)
     {
-        currentChessPosition = new ChessPosition(fen);
+        CurrentChessPosition = new ChessPosition(fen);
     }
 }

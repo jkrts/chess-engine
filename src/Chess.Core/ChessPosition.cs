@@ -96,14 +96,10 @@ public class ChessPosition
 
                     var newPiece = new Piece(pieceType, pieceColor);
                     
-                    try
-                    {
-                        _pieces.Add(topBoardIndex, newPiece);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ArgumentException(ex.Message);
-                    }
+                    if (_pieces.ContainsKey(topBoardIndex))
+                        throw new ArgumentException($"FEN is invalid: two pieces occupy square {IndexToSquare(topBoardIndex)}.");
+
+                    _pieces.Add(topBoardIndex, newPiece);
 
                     file++;
                 }

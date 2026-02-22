@@ -18,15 +18,4 @@ public enum PieceColor
     Black = -1
 }
 
-public record Piece
-{
-    public PieceType Type { get; init; }
-    public PieceColor Color { get; init; }
-
-
-    public Piece(PieceType type, PieceColor color)
-    {
-        Type = type;
-        Color = color;
-    }
-}
+public record Piece(PieceType Type, PieceColor Color);

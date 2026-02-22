@@ -22,7 +22,7 @@ public partial class MainForm : Form
 		Title = "Chess Engine";
 		this.ClientSize = new Size(1600, 900);
 
-		_boardControl = new ChessboardControl(_chessGame.currentChessPosition, new Size(700, 700));
+		_boardControl = new ChessboardControl(_chessGame.CurrentChessPosition, new Size(700, 700));
 		_txtFen = new TextBox { Text = "", Width = 600 };
 		_btnLoadFen = new Button { Text = "Load", Width = 90 };
 
@@ -98,9 +98,8 @@ public partial class MainForm : Form
 
 		try
 		{
-			_chessGame = new ChessGame();
-			_chessGame.currentChessPosition.LoadFenPosition(fen);
-			_boardControl.UpdateChessPosition(_chessGame.currentChessPosition);
+			_chessGame = new ChessGame(fen);
+			_boardControl.UpdateChessPosition(_chessGame.CurrentChessPosition);
 			_boardControl.Invalidate();
 		}
 		catch (Exception ex)
