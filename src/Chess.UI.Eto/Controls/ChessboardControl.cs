@@ -7,16 +7,16 @@ namespace Chess.UI.Eto.Controls;
 
 public sealed class ChessboardControl : Drawable
 {
-    private Board _chessBoard;
+    private ChessPosition _chessPosition;
     private readonly Dictionary<int, Bitmap> _pieceImages = [];
     private Size _boardSize;
     private float _squareSize;
     private string? _selectedSquare;
 
 
-    public ChessboardControl(Board chessBoard, Size boardSize)
+    public ChessboardControl(ChessPosition chessPosition, Size boardSize)
     {
-        _chessBoard = chessBoard;
+        _chessPosition = chessPosition;
         // repaint when resized
         this.Size = boardSize + new Size(5, 5);
         _boardSize = boardSize;
@@ -27,6 +27,11 @@ public sealed class ChessboardControl : Drawable
 
         this.CanFocus = true;
         this.MouseDown += ChessboardControl_MouseDown;
+    }
+
+    public void UpdateChessPosition(ChessPosition newChessPosition)
+    {
+        _chessPosition = newChessPosition;
     }
 
     private void LoadPieceImages()
@@ -89,7 +94,7 @@ public sealed class ChessboardControl : Drawable
     private void DrawPieces(Graphics g)
     {
 
-        foreach (var (posIndex, piece) in _chessBoard.Pieces)
+        foreach (var (posIndex, piece) in _chessPosition.Pieces)
         {
             // White = 1, Black = 2. Pawn = 1, so white would be 1*1, black would be -1*1
             //                    White = 1          Pawn = 1     = 1
@@ -104,7 +109,7 @@ public sealed class ChessboardControl : Drawable
             float x = (_squareSize - drawWidth) / 2f;
             float y = (_squareSize - drawHeight) / 2f;
 
-            var pieceSquare = _chessBoard.IndexToSquare(posIndex);
+            var pieceSquare = _chessPosition.IndexToSquare(posIndex);
             var file = (int)(pieceSquare[0] - 'a');
             var rank = (int)7-(pieceSquare[1] - '1'); // flip rank for A8 top left -visual
 
@@ -188,7 +193,7 @@ public sealed class ChessboardControl : Drawable
         char c = (char)('a' + (file));
         string sq = c + (rank + 1).ToString(); 
       
-        var pieceAt = _chessBoard.GetPieceAt(sq);
+        var pieceAt = _chessPosition.GetPieceAt(sq);
 
         if (pieceAt == null)
         {
