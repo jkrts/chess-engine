@@ -1,6 +1,6 @@
 namespace Chess.Core;
 
-public class Board
+public class ChessPosition
 {
     public const string STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     private Dictionary<int, Piece> _pieces = new ();
@@ -32,12 +32,12 @@ public class Board
         91, 92, 93, 94, 95, 96, 97, 98
     };
 
-    public Board()
+    public ChessPosition()
     {
         SetStartPositions();
     }
 
-    public Board(string fen)
+    public ChessPosition(string fen)
     {
         if (String.IsNullOrWhiteSpace(fen))        
             throw new ArgumentException("FEN string cannot be empty.", nameof(fen));
@@ -57,7 +57,7 @@ public class Board
 
     public void LoadFenPosition(string fen)
     {
-
+        
         ClearBoard();
 
         var pieceTypeFromChar = new Dictionary<char, PieceType>()

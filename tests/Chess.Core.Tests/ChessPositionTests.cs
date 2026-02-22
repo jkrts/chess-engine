@@ -2,9 +2,9 @@ using Chess.Core;
 
 namespace Chess.Core.Tests;
 
-public class BoardTests
+public class ChessPositionTests
 {
-    private readonly Board _board = new Board();
+    private readonly ChessPosition _chessPosition = new ChessPosition();
 
     [Theory]
     [InlineData("a8", 0)]
@@ -16,7 +16,7 @@ public class BoardTests
     [InlineData("h1", 63)]
     public void SquareToIndex_WhenCalled_ShouldReturnValidBoardPositionIndex(string square, int expected)
     {
-        var index = _board.SquareToIndex(square);
+        var index = _chessPosition.SquareToIndex(square);
 
         Assert.Equal(expected, index);
     }
@@ -32,7 +32,7 @@ public class BoardTests
     [InlineData(63, "h1")]
     public void IndexToSquare_WhenCalled_ShouldReturnValidSquare(int index, string expected)
     {
-        var square = _board.IndexToSquare(index);
+        var square = _chessPosition.IndexToSquare(index);
 
         Assert.Equal(expected, square);
     }
@@ -43,8 +43,8 @@ public class BoardTests
     {
         for (int i = 0; i < 64; i++)
         {
-            string square = _board.IndexToSquare(i);
-            int roundTripped = _board.SquareToIndex(square);
+            string square = _chessPosition.IndexToSquare(i);
+            int roundTripped = _chessPosition.SquareToIndex(square);
             Assert.True(i == roundTripped, $"Failed for index {i} (square '{square}')");
         }
     }
@@ -52,7 +52,7 @@ public class BoardTests
     [Fact]
     public void GetPieceAt_WhenSquareHasPiece_ReturnsPiece()
     {
-        var piece = _board.GetPieceAt("a8");
+        var piece = _chessPosition.GetPieceAt("a8");
 
         Assert.NotNull(piece);
         Assert.Equal(PieceType.Rook, piece.Type);
@@ -62,7 +62,7 @@ public class BoardTests
     [Fact]
     public void GetPieceAt_WhenSquareIsEmpty_ReturnsNull()
     {
-        var piece = _board.GetPieceAt("e4");
+        var piece = _chessPosition.GetPieceAt("e4");
 
         Assert.Null(piece);
     }
@@ -70,7 +70,7 @@ public class BoardTests
     [Fact]
     public void GetPieceAt_WhenSquareHasWhitePiece_ReturnsPiece()
     {
-        var piece = _board.GetPieceAt("e1");
+        var piece = _chessPosition.GetPieceAt("e1");
 
         Assert.NotNull(piece);
         Assert.Equal(PieceType.King, piece.Type);
