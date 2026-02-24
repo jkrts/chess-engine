@@ -28,6 +28,7 @@ public static class FenValidator
 
     private static readonly string _validPiecePlacementChars = "12345678pnbrqkPNBRQK/";
     private static readonly Regex _consecutiveSpaces = new Regex(@"\s{2,}");
+    private static readonly string ValidFenCharacters = "012345678pnbrqkPNBRQK/-w ";
 
     public static FenValidationResult Validate(string fen)
     {
@@ -45,6 +46,12 @@ public static class FenValidator
         if(!HasValidPiecePlacement(fenParts[0]))
             return FenValidationResult.Invalid("Invalid Piece Placement in FEN string"); 
 
+        if (!HasOnlyValidFenCharacters(fen))
+            return FenValidationResult.Invalid("FEN string contains invalid characters.");
+        else if (HasConsecutiveWhitespaces(fen))
+            return FenValidationResult.Invalid("FEN string contains consecutive spaces.");
+        else if (!HasValidNumberOfParts(fen))
+            return FenValidationResult.Invalid("FEN string contains invalid number of parts.");
 
         return FenValidationResult.Valid();
 
@@ -98,16 +105,16 @@ public static class FenValidator
         // TODO
         return true;
     }
-
-    public static bool HasOnlyValidFenCharacters(string fen)
-    {
-        // TODO
-        return true;
-    }
+    
+    public static bool HasOnlyValidFenCharacters(string fen) =>
+        fen.All(c => ValidFenCharacters.Contains(c));
 
     public static bool HasConsecutiveWhitespaces(string fen)
     {
-        // TODO
-        return true;
+        Regex regex = new Regex(@"\s{2,}");
+        return regex.IsMatch(fen);
     }
+
+    public static bool HasValidNumberOfParts(string fen) =>
+        fen.Count(c => c == ' ') == 5;
 }
