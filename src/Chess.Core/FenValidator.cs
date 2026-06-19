@@ -53,6 +53,13 @@ public static class FenValidator
         else if (!HasValidNumberOfSpaces(fen))
             return FenValidationResult.Invalid("FEN string contains invalid number of spaces.");
 
+
+        var fenParts = fen.Split(' ');
+
+        if(!HasValidPiecePlacement(fenParts[0]))
+            return FenValidationResult.Invalid("Invalid Piece Placement in FEN string"); 
+
+
         return FenValidationResult.Valid();
 
     }
@@ -111,9 +118,7 @@ public static class FenValidator
 
     public static bool HasConsecutiveWhitespaces(string fen)
     {
-        return _consecutiveSpaces.IsMatch(fen);
+        // TODO
+        return true;
     }
-
-    public static bool HasValidNumberOfSpaces(string fen) =>
-        fen.Count(c => c == ' ') == 5;
 }
