@@ -26,7 +26,7 @@ public static class FenValidator
     // 7. Chess Logic for valid position????
 
 
-    private static readonly string _validFenCharacters = "0123456789pnbrqkPNBRQK/-w ";
+    private static readonly string _validPiecePlacementChars = "12345678pnbrqkPNBRQK/";
     private static readonly Regex _consecutiveSpaces = new Regex(@"\s{2,}");
 
     public static FenValidationResult Validate(string fen)
@@ -34,25 +34,80 @@ public static class FenValidator
 
         if (string.IsNullOrWhiteSpace(fen))
             return FenValidationResult.Invalid("FEN string is null or empty");
-        else if (!HasOnlyValidFenCharacters(fen))
-            return FenValidationResult.Invalid("FEN string contains invalid characters.");
-        else if (HasConsecutiveWhitespaces(fen))
+        else if (!HasZeroConsecutiveWhitespaces(fen))
             return FenValidationResult.Invalid("FEN string contains consecutive spaces.");
         else if (!HasValidNumberOfSpaces(fen))
             return FenValidationResult.Invalid("FEN string contains invalid number of spaces.");
+
+
+        var fenParts = fen.Split(' ');
+
+        if(!HasValidPiecePlacement(fenParts[0]))
+            return FenValidationResult.Invalid("Invalid Piece Placement in FEN string"); 
+
 
         return FenValidationResult.Valid();
 
     }
 
-    public static bool HasOnlyValidFenCharacters(string fen) =>
-        fen.All(c => _validFenCharacters.Contains(c));
-
-    public static bool HasConsecutiveWhitespaces(string fen)
-    {
-        return _consecutiveSpaces.IsMatch(fen);
-    }
+    public static bool HasZeroConsecutiveWhitespaces(string fen) =>
+        _consecutiveSpaces.IsMatch(fen) ? false : true;
 
     public static bool HasValidNumberOfSpaces(string fen) =>
         fen.Count(c => c == ' ') == 5;
+
+
+    public static bool HasValidPiecePlacement(string piecePlacement)
+    {
+        // TODO
+
+        if(!piecePlacement.All(c => _validPiecePlacementChars.Contains(c)))
+            return false;
+
+
+
+        return true;
+    }
+
+    public static bool HasValidColor(string fen)
+    {
+        // TODO
+        return true;
+    }
+
+    public static bool HasValidCastling(string fen)
+    {
+        // TODO
+        return true;
+    }
+
+    public static bool HasValidEnPassantTarget(string fen)
+    {
+        // TODO
+        return true;
+    }
+
+    public static bool HasValidHalfmoveClock(string fen)
+    {
+        // TODO
+        return true;
+    }
+
+    public static bool HasValidFullmoveNumber(string fen)
+    {
+        // TODO
+        return true;
+    }
+
+    public static bool HasOnlyValidFenCharacters(string fen)
+    {
+        // TODO
+        return true;
+    }
+
+    public static bool HasConsecutiveWhitespaces(string fen)
+    {
+        // TODO
+        return true;
+    }
 }
