@@ -1,7 +1,7 @@
-using Eto;
+﻿using Eto;
 using Eto.Forms;
 
-namespace Chess.UI.Eto;
+namespace Chess.UI.Eto.Windows;
 class Program
 {
     [STAThread]
@@ -9,8 +9,10 @@ class Program
     {
         try
         {
-            var app = new Application(Platforms.Gtk);
+            
+            var app = new Application(Platforms.Wpf);
             app.Run(new MainForm());
+            
         }
         catch (Exception ex)
         {
