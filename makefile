@@ -11,7 +11,7 @@ restore-linux:
 	dotnet restore ChessEngine.Linux.slnf
 
 run-linux:
-	dotnet run --project src/ChessEngine.UI.Eto.Linux/ChessEngine.UI.Eto.Linux.csproj
+	dotnet run --project src/Chess.UI.Eto.Linux/Chess.UI.Eto.Linux.csproj
 
 # Windows
 build-win:
@@ -24,4 +24,4 @@ restore-win:
 	dotnet restore ChessEngine.Windows.slnf
 
 run-win:
-	dotnet run --project src/ChessEngine.UI.Eto.Windows/ChessEngine.UI.Eto.Windows.csproj
+	dotnet run --project src/Chess.UI.Eto.Windows/Chess.UI.Eto.Windows.csproj
