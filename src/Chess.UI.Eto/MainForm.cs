@@ -1,5 +1,6 @@
 using Eto.Forms;
 using Eto.Drawing;
+using System.Reflection;
 using Chess.UI.Eto.Controls;
 using Chess.Core;
 
@@ -20,6 +21,7 @@ public partial class MainForm : Form
 		//chessBoard = new Board();
 
 		Title = "Chess Engine";
+		
 		this.ClientSize = new Size(1600, 900);
 
 		_boardControl = new ChessboardControl(_chessGame.CurrentChessPosition, new Size(700, 700));
