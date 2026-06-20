@@ -16,14 +16,23 @@ public sealed class ChessboardControl : Drawable
     private readonly Font _coordinateFont = new("Monospace", 9);
     private readonly SolidBrush _coordinateBrush = new(Colors.Gray);
 
+    private const float LeftMargin = 35f;
+    private const float BottomMargin = 35f;
+    private const float RightMargin = 12f;
+    private const float TopMargin = 0f;
+
 
     public ChessboardControl(ChessPosition chessPosition, Size boardSize)
     {
         _chessPosition = chessPosition;
-        // repaint when resized
-        this.Size = boardSize + new Size(5, 5);
         _boardSize = boardSize;
-        _squareSize = _boardSize.Width / 8;
+        _squareSize = _boardSize.Width / 8f;
+
+        this.Size = new Size(
+            (int)(boardSize.Width + LeftMargin + RightMargin),
+            (int)(boardSize.Height + TopMargin + BottomMargin)
+        );
+
         this.SizeChanged += (sender, e) => Invalidate();
 
         LoadPieceImages();
@@ -94,36 +103,6 @@ public sealed class ChessboardControl : Drawable
 
     }
 
-    private void DrawPieces(Graphics g)
-    {
-
-        foreach (var (posIndex, piece) in _chessPosition.Pieces)
-        {
-            // White = 1, Black = 2. Pawn = 1, so white would be 1*1, black would be -1*1
-            //                    White = 1          Pawn = 1     = 1
-            //                    Black = -1          Pawn = 1     = -1
-            int pieceValue = (int)piece.Color * (int)piece.Type;
-
-             // 87.5 x 87.5
-            Image img = _pieceImages[pieceValue];
-            float scale = Math.Min(_squareSize * .8f / img.Width, _squareSize * .8f / img.Height);
-            int drawWidth = (int)(img.Width * scale);
-            int drawHeight = (int)(img.Height * scale);
-            float x = (_squareSize - drawWidth) / 2f;
-            float y = (_squareSize - drawHeight) / 2f;
-
-            var pieceSquare = _chessPosition.IndexToSquare(posIndex);
-            var file = (int)(pieceSquare[0] - 'a');
-            var rank = (int)7-(pieceSquare[1] - '1'); // flip rank for A8 top left -visual
-
-            float xOffset = (float)(file * _squareSize);
-            float yOffset = (float)(rank * _squareSize);
-
-            var rect = new RectangleF(x+xOffset, y+yOffset, drawWidth, drawHeight);
-            g.DrawImage(img, rect);
-        }
-    }
-
     private void DrawChessboard(Graphics g)
     {
         const int files = 8;
@@ -139,7 +118,7 @@ public sealed class ChessboardControl : Drawable
                 var color = isDark ? Colors.LightGreen : Colors.Cornsilk;
 
                 var rect = new RectangleF(
-                    file * _squareSize,
+                    LeftMargin + file * _squareSize,
                     rank * _squareSize,
                     _squareSize,
                     _squareSize);
@@ -162,8 +141,8 @@ public sealed class ChessboardControl : Drawable
         {
             char letter = (char)(('a') + file);
             var text = letter.ToString();
-            var x = file * _squareSize + _squareSize / 2 - 5;
-            var y = 8 * _squareSize - 18;
+            float x = LeftMargin + file * _squareSize + _squareSize / 2f - 5f;
+            float y = 8f * _squareSize + 14;
             g.DrawText(_coordinateFont, _coordinateBrush, x, y, text);
         }
 
@@ -171,9 +150,39 @@ public sealed class ChessboardControl : Drawable
         {
             int number = 8 - rank;
             var text = number.ToString();
-            var x = 4;
-            var y = rank * _squareSize + _squareSize / 2 - 6;
+            float x = 8f;
+            float y = rank * _squareSize + _squareSize / 2f - 8f;
             g.DrawText(_coordinateFont, _coordinateBrush, x, y, text);
+        }
+    }
+
+    private void DrawPieces(Graphics g)
+    {
+
+        foreach (var (posIndex, piece) in _chessPosition.Pieces)
+        {
+            // White = 1, Black = 2. Pawn = 1, so white would be 1*1, black would be -1*1
+            //                    White = 1          Pawn = 1     = 1
+            //                    Black = -1          Pawn = 1     = -1
+            int pieceValue = (int)piece.Color * (int)piece.Type;
+
+             // 87.5 x 87.5
+            Image img = _pieceImages[pieceValue];
+            float scale = Math.Min(_squareSize * .75f / img.Width, _squareSize * .75f / img.Height);
+            int drawWidth = (int)(img.Width * scale);
+            int drawHeight = (int)(img.Height * scale);
+            float x = (_squareSize - drawWidth) / 2f;
+            float y = (_squareSize - drawHeight) / 2f;
+
+            var pieceSquare = _chessPosition.IndexToSquare(posIndex);
+            var file = (int)(pieceSquare[0] - 'a');
+            var rank = (int)7-(pieceSquare[1] - '1'); // flip rank for A8 top left -visual
+
+            float xOffset = (float)(LeftMargin + file * _squareSize);
+            float yOffset = (float)(rank * _squareSize);
+
+            var rect = new RectangleF(x+xOffset, y+yOffset, drawWidth, drawHeight);
+            g.DrawImage(img, rect);
         }
     }
 
@@ -183,6 +192,7 @@ public sealed class ChessboardControl : Drawable
             return;
 
         PointF clickPos = e.Location;
+        clickPos.X = clickPos.X - LeftMargin;
 
         int file = (int)(clickPos.X / _squareSize);
         int rank = 7 - (int)(clickPos.Y / _squareSize);
@@ -203,6 +213,8 @@ public sealed class ChessboardControl : Drawable
         {
             _selectedSquare = sq;
         }
+
+        Console.WriteLine("Selected Square: " + _selectedSquare);
 
         Invalidate();
     }
