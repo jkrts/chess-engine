@@ -28,7 +28,7 @@ public static class FenValidator
 
     private static readonly string _validPiecePlacementChars = "12345678pnbrqkPNBRQK/";
     private static readonly Regex _consecutiveSpaces = new Regex(@"\s{2,}");
-    private static readonly string ValidFenCharacters = "012345678pnbrqkPNBRQK/-w ";
+    private static readonly string _validFenCharacters = "012345678pnbrqkPNBRQK/-w ";
 
     public static FenValidationResult Validate(string fen)
     {
@@ -53,8 +53,6 @@ public static class FenValidator
         else if (!HasValidNumberOfSpaces(fen))
             return FenValidationResult.Invalid("FEN string contains invalid number of spaces.");
 
-
-        var fenParts = fen.Split(' ');
 
         if(!HasValidPiecePlacement(fenParts[0]))
             return FenValidationResult.Invalid("Invalid Piece Placement in FEN string"); 
