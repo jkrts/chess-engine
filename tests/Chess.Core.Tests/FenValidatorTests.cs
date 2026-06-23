@@ -1,188 +1,205 @@
+using Xunit;
+
 namespace Chess.Core.Tests;
 
 public class FenValidatorTests
 {
     // HasOnlyValidFenCharacters
-    [Fact]
-    public void ValidFenCharacters_ShouldReturnFalse_WhenInputFenHasInvalidChars()
+    [Theory]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    [InlineData("rnbqkbnr/p1pp1ppp/1p6/P7/1pPp4/8/1P1PPPPP/RNBQKBNR w KQkq b6 0 5")]
+    public void ValidFenCharacters_ShouldReturnTrue_WhenInputFenHasValidChars(string input)
     {
-        var input = "rnbqkbnr/p1pp1ppp/1p6/P7/1pPZ4/8/1P1PPPPP/RNBQKBNR w KQkq b6 0 5";
-
-        Assert.False(FenValidator.HasOnlyValidFenCharacters(input));
-    }
-
-    [Fact]
-    public void ValidFenCharacters_ShouldReturnTrue_WhenInputFenHasValidChars()
-    {
-        var input = "rnbqkbnr/p1pp1ppp/1p6/P7/1pPp4/8/1P1PPPPP/RNBQKBNR w KQkq b6 0 5";
-
         Assert.True(FenValidator.HasOnlyValidFenCharacters(input));
     }
 
-    // HasNoConsecutiveWhitespaces
-    [Fact]
-    public void HasNoConsecutiveWhiteSpaces_ShouldReturnFalse_WhenInputFenHasConsecutiveWhitespaces()
+    [Theory]
+    [InlineData("rnbqkbnr/p1pp1ppp/1p6/P7/1pPZ4/8/1P1PPPPP/RNBQKBNR w KQkq b6 0 5")]
+    [InlineData("6=&rnbqkbnr/p1pp1ppp/1p6/P7/1pP4/8/1P1PPPPP/RNBQKBNR w KQkq b6 0 5")]
+    public void ValidFenCharacters_ShouldReturnFalse_WhenInputFenHasInvalidChars(string input)
     {
-        var input = "rnbqkbnr/p1pp1ppp/1p6/P7/1pPp4/8/1P1PPPPP/RNBQKBNR  w KQkq b6 0 5";
-
-        Assert.False(FenValidator.HasNoConsecutiveWhitespaces(input));
+        Assert.False(FenValidator.HasOnlyValidFenCharacters(input));
     }
 
-    [Fact]
-    public void HasNoConsecutiveWhiteSpaces_ShouldReturnTrue_WhenInputFenDoesNotHaveConsecutiveWhitespaces()
+    // HasNoConsecutiveWhitespaces
+    [Theory]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    public void HasNoConsecutiveWhiteSpaces_ShouldReturnTrue_WhenInputFenDoesNotHaveConsecutiveWhitespaces(string input)
     {
-        var input = "rnbqkbnr/p1pp1ppp/1p6/P7/1pPp4/8/1P1PPPPP/RNBQKBNR w KQkq b6 0 5";
-
         Assert.True(FenValidator.HasNoConsecutiveWhitespaces(input));
     }
 
-    // HasNoLeadingTrailingWhitespace
-    [Fact]
-    public void HasNoLeadingTrailingWhitespace_ShouldReturnTrue_WhenInputFenHasNoLeadingTrailingWhitespace()
+    [Theory]
+    [InlineData("rnbqkbnr/p1pp1ppp/1p6/P7/1pPp4/8/1P1PPPPP/RNBQKBNR  w KQkq b6 0 5")]
+    [InlineData("rnbqkbnr/p1pp1ppp/1p6/P7/1pPp4/8/1P1PPPPP/RNBQKBNR w KQkq b6     0 5")]
+    [InlineData("    rnbqkbnr/p1pp1ppp/1p6/P7/1pPp4/8/1P1PPPPP/RNBQKBNR wKQkqb605")]
+    public void HasNoConsecutiveWhiteSpaces_ShouldReturnFalse_WhenInputFenHasConsecutiveWhitespaces(string input)
     {
-        var input = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        Assert.False(FenValidator.HasNoConsecutiveWhitespaces(input));
+    }
 
+    // HasNoLeadingTrailingWhitespace
+    [Theory]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    public void HasNoLeadingTrailingWhitespace_ShouldReturnTrue_WhenInputFenHasNoLeadingTrailingWhitespace(string input)
+    {
         Assert.True(FenValidator.HasNoLeadingTrailingWhitespace(input));
     }
 
-    // HasValidNumberOfSpaces
-    [Fact]
-    public void HasValidNumberOfSpaces_ShouldReturnFalse_WhenInputFenHasInvalidNumberOfParts()
+    [Theory]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ")]
+    [InlineData(" rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    [InlineData(" rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ")]
+    public void HasNoLeadingTrailingWhitespace_ShouldReturnFalse_WhenInputFenHasLeadingTrailingWhitespace(string input)
     {
-        var input = "rnbqkbnr/p1pp1ppp/1p6/P7/1pPp4/8/1P1PPPPP/RNBQKBNR w KQkq b6 0";
-
-        Assert.False(FenValidator.HasValidNumberOfSpaces(input));
-    }
-
-    [Fact]
-    public void HasValidNumberOfSpaces_ShouldReturnTrue_WhenInputFenHasValidNumberOfSpaces()
-    {
-        var input = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        Assert.True(FenValidator.HasValidNumberOfSpaces(input));
+        Assert.False(FenValidator.HasNoLeadingTrailingWhitespace(input));
     }
 
     // Parts
     // HasDataForEachPart
-    [Fact]
-    public void HasDataForEachPart_ShouldReturnTrue_WhenInputFenHasDataForEachPart()
+    [Theory]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    [InlineData("4k3/8/8/8/8/8/4P3/4K3 w - - 5 39")]
+    public void HasDataForEachPart_ShouldReturnTrue_WhenInputFenHasDataForEachPart(string input)
     {
-        var input = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
         var inputParts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         Assert.True(FenValidator.HasDataForEachPart(inputParts));
     }
 
-    [Fact]
-    public void HasDataForEachPart_ShouldReturnFalse_WhenInputFenDoesNotHaveDataForEachPart()
+    [Theory]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR   KQkq - 0 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR   KQkq -  0 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR KQkq- 01")]
+    public void HasDataForEachPart_ShouldReturnFalse_WhenInputFenDoesNotHaveDataForEachPart(string input)
     {
-        var input = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR   KQkq - 0 1";
-
         var inputParts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         Assert.False(FenValidator.HasDataForEachPart(inputParts));
     }
 
     // HasValidPiecePlacementChars
-    [Fact]
-    public void HasValidPiecePlacementChars_ShouldReturnTrue_WhenPiecePlacementPartHasValidChars()
+    [Theory]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR")]
+    [InlineData("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR")]
+    [InlineData("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")]
+    [InlineData("4k3/8/8/8/8/8/4P3/4K3")]
+    public void HasValidPiecePlacementChars_ShouldReturnTrue_WhenPiecePlacementPartHasValidChars(string input)
     {
-        var input = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-
         Assert.True(FenValidator.HasValidPiecePlacementChars(input));
     }
 
-    [Fact]
-    public void HasValidPiecePlacementChars_ShouldReturnFalse_WhenPiecePlacementPartDoesNotHaveValidChars()
+    [Theory]
+    [InlineData("rnbqkbxr/pppppppp/8/8/8/8/PPPXPPPP/RNBQKBNR")]
+    [InlineData("rnbqkbxrpppppppp/8/8/8/8/PPPPPPP/RNBQKBNR")]
+    [InlineData("rnbqkbxr/ppppppp/8/8/8/8/PPPPPPP/RNBQKBNR")]       // rank with 7
+    [InlineData("rnbqkbxr/pppppppp/8/8/8/8/PPPPPPP1/RNBQKBNR")]     // rank with 9
+    [InlineData("rnbqkbxrpppppppp/8/8/8/8/PPPPPPP/8/RNBQKBNR")]       // 9 ranks
+    public void HasValidPiecePlacementChars_ShouldReturnFalse_WhenPiecePlacementPartDoesNotHaveValidChars(string input)
     {
-        var input = "rnbqkbxr/pppppppp/8/8/8/8/PPPXPPPP/RNBQKBNR";
-
         Assert.False(FenValidator.HasValidPiecePlacementChars(input));
     }
 
     // HasValidActiveColorChar
-    [Fact]
-    public void HasValidActiveColorChar_ShouldReturnTrue_WhenActiveColorPartHasValidChars()
+    [Theory]
+    [InlineData("w")]
+    [InlineData("b")]
+    public void HasValidActiveColorChar_ShouldReturnTrue_WhenActiveColorPartHasValidChars(string input)
     {
-        var input = "w";
-
         Assert.True(FenValidator.HasValidActiveColorChar(input));
     }
     
-    [Fact]
-    public void HasValidActiveColorChar_ShouldReturnFalse_WhenActiveColorPartDoesNotHaveValidChars()
+    [Theory]
+    [InlineData("-")]
+    [InlineData("X")]
+    [InlineData("W")]
+    [InlineData("B")]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void HasValidActiveColorChar_ShouldReturnFalse_WhenActiveColorPartDoesNotHaveValidChars(string input)
     {
-        var input = "f";
-
         Assert.False(FenValidator.HasValidActiveColorChar(input));
     }
 
     // HasValidCastlingAvailabilityChars
-    [Fact]
-    public void HasValidCastlingAvailabilityChars_ShouldReturnTrue_WhenHasValidCastlingAvailabilityPartHasValidChars()
-    {
-        var input = "kKqQ";
-
+    [Theory]
+    [InlineData("-")]       // White and Blaock None
+    [InlineData("KQkq")]    // White and Black Full
+    [InlineData("Kk")]      // White and Black Kingside
+    [InlineData("Qq")]      // White and Black Queenside
+    [InlineData("K")]       // White Kingside only
+    [InlineData("q")]       // Black Queenside only
+    [InlineData("Kq")]      // White Kingside and Black Queenside
+    public void HasValidCastlingAvailabilityChars_ShouldReturnTrue_WhenHasValidCastlingAvailabilityPartHasValidChars(string input)
+    { 
         Assert.True(FenValidator.HasValidCastlingAvailabilityChars(input));
     }
     
-    [Fact]
-    public void HasValidCastlingAvailabilityChars_ShouldReturnFalse_WhenHasValidCastlingAvailabilityPartDoesNotHaveValidChars()
+    [Theory]
+    [InlineData("kK")]       // Wrong order
+    [InlineData("qK")]       // Wrong order
+    [InlineData("QK")]       // Wrong order
+    [InlineData("qQ")]       // Wrong order
+    [InlineData("ts")]       // Wrong characters
+    [InlineData("KQkqK")]    // Too many valid characters
+    public void HasValidCastlingAvailabilityChars_ShouldReturnFalse_WhenHasValidCastlingAvailabilityPartDoesNotHaveValidChars(string input)
     {
-        var input = "tg";
-
         Assert.False(FenValidator.HasValidCastlingAvailabilityChars(input));
     }
 
     // HasValidEnPassantTargetSquareChars
-    [Fact]
-    public void HasValidEnPassantTargetSquareChars_ShouldReturnTrue_WhenHasValidEnPassantTargetSquarePartHasValidChars()
+    [Theory]
+    [InlineData("e3")]
+    [InlineData("b6")]
+    public void HasValidEnPassantTargetSquareChars_ShouldReturnTrue_WhenHasValidEnPassantTargetSquarePartHasValidChars(string input)
     {
-        var input = "e3";
-
         Assert.True(FenValidator.HasValidEnPassantTargetSquareChars(input));
     }
     
-    [Fact]
-    public void HasValidEnPassantTargetSquareChars_ShouldReturnFalse_WhenHasValidEnPassantTargetSquarePartDoesNotHaveValidChars()
+    [Theory]
+    [InlineData("c5")]
+    [InlineData("a1")]
+    public void HasValidEnPassantTargetSquareChars_ShouldReturnFalse_WhenHasValidEnPassantTargetSquarePartDoesNotHaveValidChars(string input)
     {
-        var input = "c5";
-
         Assert.False(FenValidator.HasValidEnPassantTargetSquareChars(input));
     }
 
     // HasValidHalfMoveClockChars
-    [Fact]
-    public void HasValidHalfMoveClockChars_ShouldReturnTrue_WhenHasValidHalfMoveClockPartHasValidChars()
+    [Theory]
+    [InlineData("0")]
+    [InlineData("40")]
+    public void HasValidHalfMoveClockChars_ShouldReturnTrue_WhenHasValidHalfMoveClockPartHasValidChars(string input)
     {
-        var input = "0";
-
         Assert.True(FenValidator.HasValidHalfMoveClockChars(input));
     }
     
-    [Fact]
-    public void HasValidHalfMoveClockChars_ShouldReturnFalse_WhenHasValidHalfMoveClockPartDoesNotHaveValidChars()
+    [Theory]
+    [InlineData("d")]
+    [InlineData("-20")]
+    public void HasValidHalfMoveClockChars_ShouldReturnFalse_WhenHasValidHalfMoveClockPartDoesNotHaveValidChars(string input)
     {
-        var input = "d";
-
         Assert.False(FenValidator.HasValidHalfMoveClockChars(input));
     }
 
     // HasValidFullMoveNumberChars
-    [Fact]
-    public void HasValidFullMoveNumberChars_ShouldReturnTrue_WhenHasValidFullMoveNumberPartHasValidChars()
+    [Theory]
+    [InlineData("1")]
+    [InlineData("99")]
+    public void HasValidFullMoveNumberChars_ShouldReturnTrue_WhenHasValidFullMoveNumberPartHasValidChars(string input)
     {
-        var input = "4";
-
         Assert.True(FenValidator.HasValidFullMoveNumberChars(input));
     }
     
-    [Fact]
-    public void HasValidFullMoveNumberChars_ShouldReturnFalse_WhenHasValidFullMoveNumberPartDoesNotHaveValidChars()
+    [Theory]
+    [InlineData("-49")]
+    [InlineData("-")]
+    [InlineData("0")]
+    [InlineData("X")]
+    [InlineData("bjds")]
+    [InlineData("1 2")]
+    public void HasValidFullMoveNumberChars_ShouldReturnFalse_WhenHasValidFullMoveNumberPartDoesNotHaveValidChars(string input)
     {
-        var input = "0";
-
         Assert.False(FenValidator.HasValidFullMoveNumberChars(input));
     }
 
@@ -199,21 +216,39 @@ public class FenValidatorTests
     }
 
     [Fact]
-    public void Validate_ShouldReturnValidResult_WhenFENStringIsStartingPosition()
+    public void Validate_ShouldReturnInvalidResult_WhenFENStringIsEmpty()
     {
-        string input = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        string input = String.Empty;
 
+        var result = FenValidator.Validate(input);
+
+        Assert.False(result.IsValid);
+        Assert.NotNull(result.ErrorMessage);
+    }
+
+    [Theory]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1")]
+    [InlineData("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2")]
+    [InlineData("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2")]
+    [InlineData("4k3/8/8/8/8/8/4P3/4K3 w - - 5 39")]
+    [InlineData("rnbqkb1r/pppppppp/5n2/8/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 2 3")]
+    public void Validate_ShouldReturnValidResult_WhenFENStringIsValid(string input)
+    {
         var result = FenValidator.Validate(input);
 
         Assert.True(result.IsValid);
         Assert.Null(result.ErrorMessage);
     }
 
-    [Fact]
-    public void Validate_ShouldReturnInvalidResult_WhenFENStringIsInvalid()
+    [Theory]
+    [InlineData("rnbqkbnr/ppppppp p/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    [InlineData(" ")]
+    [InlineData("40")]
+    [InlineData("-x-")]
+    [InlineData("  hjdas  asdasasd")]
+    public void Validate_ShouldReturnInvalidResult_WhenFENStringIsInvalid(string input)
     {
-        string input = "rnbqkbnr/ppppppp p/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
         var result = FenValidator.Validate(input);
 
         Assert.False(result.IsValid);

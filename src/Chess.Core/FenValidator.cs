@@ -17,8 +17,9 @@ public static class FenValidator
         '9'
     */
 
-    private static readonly string _validFenCharacters = "0123456789pnbrqkPNBRQK/-w ";
-    private static readonly Regex _consecutiveWhitepaces = new Regex(@"\s{2,}", RegexOptions.Compiled);
+    private static readonly string _validFenCharacters = "0123456789pnbrqkPNBRQK/-w acdefg";
+    private static readonly Regex _whitepacesRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
+    private static readonly Regex _castlingRegex = new Regex(@"^(?:-|K?Q?k?q?)$", RegexOptions.Compiled);
     private static readonly string _validPiecePlacementChars = "12345678pnbrqkPNBRQK/";
     
     public static FenValidationResult Validate(string fen)
@@ -34,9 +35,6 @@ public static class FenValidator
         
         if (!HasNoLeadingTrailingWhitespace(fen))
             return FenValidationResult.Invalid("FEN string begins or ends with a whitespace.");
-
-        if (!HasValidNumberOfSpaces(fen))
-            return FenValidationResult.Invalid("FEN string has invalid number of spaces.");
         
         var fenParts = fen.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
@@ -78,7 +76,7 @@ public static class FenValidator
 
     public static bool HasNoConsecutiveWhitespaces(string fen)
     {
-        if (_consecutiveWhitepaces.IsMatch(fen))
+        if (_whitepacesRegex.IsMatch(fen))
             return false;
         return true;
     }
@@ -106,7 +104,41 @@ public static class FenValidator
 
     public static bool HasValidPiecePlacementChars(string fenPartPiecePlacement)
     {
-        return fenPartPiecePlacement.All(c => _validPiecePlacementChars.Contains(c));
+        if (!fenPartPiecePlacement.All(c => _validPiecePlacementChars.Contains(c)))
+            return false;
+        
+        var ranks = fenPartPiecePlacement.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+        if (ranks.Length != 8)
+            return false;
+
+        int rankSum = 0;
+
+        foreach (var rank in ranks)
+        {
+            foreach (var c in rank)
+            {
+                if(char.IsDigit(c))
+                {
+                    rankSum += (int)char.GetNumericValue(c);
+                }
+                else if(char.IsLetter(c))
+                {
+                    rankSum += 1;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            if (rankSum != 8)
+                return false;
+
+            rankSum = 0;
+        }
+
+        return true;
     }
 
     public static bool HasValidActiveColorChar(string fenPartActiveColor)
@@ -120,11 +152,7 @@ public static class FenValidator
 
     public static bool HasValidCastlingAvailabilityChars(string fenPartCastlingAvailability)
     {
-        if (fenPartCastlingAvailability.Length < 1 || fenPartCastlingAvailability.Length > 4)
-            return false;
-        if (fenPartCastlingAvailability == "-")
-            return true;
-        return fenPartCastlingAvailability.All(c => c is 'k' or 'K' or 'q' or 'Q');
+        return _castlingRegex.IsMatch(fenPartCastlingAvailability);
     }
 
     public static bool HasValidEnPassantTargetSquareChars(string fenPartEnPassant)

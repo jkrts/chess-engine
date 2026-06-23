@@ -37,6 +37,7 @@ A FEN record uses 6 data fields to represent the position:
     - 'q' has queenside castling available
 - Uppercase will come before lowercase
 - Kingside will come before queenside
+- KQkq
 
 ### 4. En Passant Target Square
 - '-' no en passant target square
