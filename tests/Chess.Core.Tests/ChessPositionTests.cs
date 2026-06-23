@@ -1,3 +1,5 @@
+using Chess.Core;
+
 namespace Chess.Core.Tests;
 
 public class ChessPositionTests

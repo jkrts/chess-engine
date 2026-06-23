@@ -1,5 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 
 namespace Chess.Core;
@@ -17,7 +15,7 @@ public static class FenValidator
         '9'
     */
 
-    private static readonly string _validFenCharacters = "0123456789pnbrqkPNBRQK/-w acdefg";
+    private static readonly string _validFenCharacters = "0123456789pnbrqkPNBRQK/-w acdefgh";
     private static readonly Regex _whitepacesRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
     private static readonly Regex _castlingRegex = new Regex(@"^(?:-|K?Q?k?q?)$", RegexOptions.Compiled);
     private static readonly string _validPiecePlacementChars = "12345678pnbrqkPNBRQK/";
@@ -113,6 +111,7 @@ public static class FenValidator
             return false;
 
         int rankSum = 0;
+        bool lastCharIsDigit = false;
 
         foreach (var rank in ranks)
         {
@@ -120,11 +119,16 @@ public static class FenValidator
             {
                 if(char.IsDigit(c))
                 {
+                    if(lastCharIsDigit)
+                        return false;
+
                     rankSum += (int)char.GetNumericValue(c);
+                    lastCharIsDigit = true;
                 }
                 else if(char.IsLetter(c))
                 {
                     rankSum += 1;
+                    lastCharIsDigit = false;
                 }
                 else
                 {
@@ -136,6 +140,7 @@ public static class FenValidator
                 return false;
 
             rankSum = 0;
+            lastCharIsDigit = false;
         }
 
         return true;
@@ -152,6 +157,9 @@ public static class FenValidator
 
     public static bool HasValidCastlingAvailabilityChars(string fenPartCastlingAvailability)
     {
+        if (string.IsNullOrEmpty(fenPartCastlingAvailability))
+            return false;
+
         return _castlingRegex.IsMatch(fenPartCastlingAvailability);
     }
 

@@ -1,4 +1,5 @@
 using Xunit;
+using Chess.Core;
 
 namespace Chess.Core.Tests;
 
@@ -91,11 +92,12 @@ public class FenValidatorTests
     }
 
     [Theory]
-    [InlineData("rnbqkbxr/pppppppp/8/8/8/8/PPPXPPPP/RNBQKBNR")]
+    [InlineData("rnbqkbxr/pppppppp/8/8/8/8/PPP PPPP/RNBQKBNR")]
     [InlineData("rnbqkbxrpppppppp/8/8/8/8/PPPPPPP/RNBQKBNR")]
     [InlineData("rnbqkbxr/ppppppp/8/8/8/8/PPPPPPP/RNBQKBNR")]       // rank with 7
     [InlineData("rnbqkbxr/pppppppp/8/8/8/8/PPPPPPP1/RNBQKBNR")]     // rank with 9
-    [InlineData("rnbqkbxrpppppppp/8/8/8/8/PPPPPPP/8/RNBQKBNR")]       // 9 ranks
+    [InlineData("rnbqkbxrpppppppp/8/8/8/8/PPPPPPP/8/RNBQKBNR")]     // 9 ranks
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/111PPPPP/RNBQKBNR")]     // consecutive digits
     public void HasValidPiecePlacementChars_ShouldReturnFalse_WhenPiecePlacementPartDoesNotHaveValidChars(string input)
     {
         Assert.False(FenValidator.HasValidPiecePlacementChars(input));
@@ -137,6 +139,7 @@ public class FenValidatorTests
     }
     
     [Theory]
+    [InlineData("")]        // empty string
     [InlineData("kK")]       // Wrong order
     [InlineData("qK")]       // Wrong order
     [InlineData("QK")]       // Wrong order
@@ -152,6 +155,8 @@ public class FenValidatorTests
     [Theory]
     [InlineData("e3")]
     [InlineData("b6")]
+    [InlineData("a3")]
+    [InlineData("h6")]
     public void HasValidEnPassantTargetSquareChars_ShouldReturnTrue_WhenHasValidEnPassantTargetSquarePartHasValidChars(string input)
     {
         Assert.True(FenValidator.HasValidEnPassantTargetSquareChars(input));
@@ -160,6 +165,10 @@ public class FenValidatorTests
     [Theory]
     [InlineData("c5")]
     [InlineData("a1")]
+    [InlineData("a9")]
+    [InlineData("h0")]
+    [InlineData("aa")]
+    [InlineData("a 1")]
     public void HasValidEnPassantTargetSquareChars_ShouldReturnFalse_WhenHasValidEnPassantTargetSquarePartDoesNotHaveValidChars(string input)
     {
         Assert.False(FenValidator.HasValidEnPassantTargetSquareChars(input));
@@ -177,6 +186,7 @@ public class FenValidatorTests
     [Theory]
     [InlineData("d")]
     [InlineData("-20")]
+    [InlineData("1 0")]
     public void HasValidHalfMoveClockChars_ShouldReturnFalse_WhenHasValidHalfMoveClockPartDoesNotHaveValidChars(string input)
     {
         Assert.False(FenValidator.HasValidHalfMoveClockChars(input));
@@ -243,6 +253,16 @@ public class FenValidatorTests
 
     [Theory]
     [InlineData("rnbqkbnr/ppppppp p/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    [InlineData("rnbqkbnr/ppppxppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR  w KQkq - 0 1")]
+    [InlineData(" rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 01")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 01")]
+    [InlineData("rnbqrkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR r KQkq - 0 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w kqKQ - 0 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e8 0 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - -7 1")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0")]
     [InlineData(" ")]
     [InlineData("40")]
     [InlineData("-x-")]
