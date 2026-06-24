@@ -192,9 +192,11 @@ public sealed class ChessboardControl : Drawable
             return;
 
         PointF clickPos = e.Location;
-        clickPos.X = clickPos.X - LeftMargin;
 
-        int file = (int)(clickPos.X / _squareSize);
+        if (clickPos.X <= LeftMargin)
+            return;
+
+        int file = (int)((clickPos.X - LeftMargin) / _squareSize);
         int rank = 7 - (int)(clickPos.Y / _squareSize);
 
         if (file < 0 || file >= 8|| rank < 0 || rank >= 8)
