@@ -100,9 +100,17 @@ public partial class MainForm : Form
 
 		try
 		{
-			_chessGame = new ChessGame(fen);
-			_boardControl.UpdateChessPosition(_chessGame.CurrentChessPosition);
-			_boardControl.Invalidate();
+			FenValidationResult validationResult = FenValidator.Validate(fen);
+			if(validationResult.IsValid)
+			{
+				_chessGame = new ChessGame(fen);
+				_boardControl.UpdateChessPosition(_chessGame.CurrentChessPosition);
+				_boardControl.Invalidate();
+			}
+			else
+			{
+				MessageBox.Show(validationResult.ErrorMessage);
+			}
 		}
 		catch (Exception ex)
 		{
