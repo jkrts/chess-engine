@@ -32,12 +32,7 @@ public class ChessPosition
         91, 92, 93, 94, 95, 96, 97, 98
     };
 
-    public ChessPosition()
-    {
-        SetStartPositions();
-    }
-
-    public ChessPosition(string fen)
+    public ChessPosition(string fen = STARTING_FEN)
     {
         if (String.IsNullOrWhiteSpace(fen))        
             throw new ArgumentException("FEN string cannot be empty.", nameof(fen));
@@ -107,32 +102,15 @@ public class ChessPosition
         }
     }
 
-/*
-    public void PrintBoard()
+    public int GetMaterialValue(PieceColor color)
     {
-        for (int i = 0; i < 64; i++)
-        {
-            //var boardIndex = topBoard[i];
-            var pieceOnSquare = false;
-            foreach (var piece in PieceList)
-            {
+        int value = 0;
 
-                if (piece.PositionIndex == i)
-                {
-                    Console.Write((int)piece.Type + " ");
-                    pieceOnSquare = true;
-                }
-            }
-            if (!pieceOnSquare)
-                Console.Write("- ");
+        // add material value logic
 
-            if ((i + 1) % 8 == 0)
-            {
-                Console.WriteLine();
-            }
-        }
+        return value;
     }
-    */
+
     /*
         public void MovePiece(string from, string to)
         {

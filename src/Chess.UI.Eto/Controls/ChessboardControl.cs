@@ -55,20 +55,20 @@ public sealed class ChessboardControl : Drawable
             {  1, "w_pawn_png_128px.png"},
             {  2, "w_knight_png_128px.png"},
             {  3, "w_king_png_128px.png"},
-            {  5, "w_bishop_png_128px.png"},
-            {  6, "w_rook_png_128px.png"},
-            {  7, "w_queen_png_128px.png"},
+            {  4, "w_bishop_png_128px.png"},
+            {  5, "w_rook_png_128px.png"},
+            {  6, "w_queen_png_128px.png"},
             { -1, "b_pawn_png_128px.png"},
             { -2, "b_knight_png_128px.png"},
             { -3, "b_king_png_128px.png"},
-            { -5, "b_bishop_png_128px.png"},
-            { -6, "b_rook_png_128px.png"},
-            { -7, "b_queen_png_128px.png"}
+            { -4, "b_bishop_png_128px.png"},
+            { -5, "b_rook_png_128px.png"},
+            { -6, "b_queen_png_128px.png"}
         };
 
         foreach (var kvp in pieceMap)
         {
-            string resourceName = $"Chess.UI.Eto.Assets.Pieces.small_no_shadow.{kvp.Value}";  // ← change to match your project!
+            string resourceName = $"Chess.UI.Eto.Assets.Pieces.small_no_shadow.{kvp.Value}";
 
             try
             {
@@ -161,7 +161,7 @@ public sealed class ChessboardControl : Drawable
 
         foreach (var (posIndex, piece) in _chessPosition.Pieces)
         {
-            // White = 1, Black = 2. Pawn = 1, so white would be 1*1, black would be -1*1
+            // White = 1, Black = -1. Pawn = 1, so white would be 1*1, black would be -1*1
             //                    White = 1          Pawn = 1     = 1
             //                    Black = -1          Pawn = 1     = -1
             int pieceValue = (int)piece.Color * (int)piece.Type;
